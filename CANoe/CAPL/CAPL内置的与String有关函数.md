@@ -53,8 +53,8 @@ Windows和Linux支持这些CAPL功能。Linux下的功能尚未经过全面测�
 | Functions          | Short Description                                            |
 | :----------------- | :----------------------------------------------------------- |
 | `mbstrlen`         | 返回字符串的长度(位置以**字符(characters)** 为单位)          |
-| `mbstrncmp`        | 比较两个字符串(位置以**字符(characters) **为单位)            |
-| `mbstrncmp_off`    | 比较两个字符串(位置以**字符(characters) **为单位)，可以指定偏移量 |
+| `mbstrncmp`        | 比较两个字符串(位置以**字符(characters)** 为单位)            |
+| `mbstrncmp_off`    | 比较两个字符串(位置以**字符(characters)** 为单位)，可以指定偏移量 |
 | `mbstrncpy`        | 将一个字符串复制到另一个字符串(位置以字符为单位)             |
 | `mbstrncpy_off`    | 将一个字符串复制到另一个字符串(位置以字符为单位)，可以指定偏移量 |
 | `mbstrstr`         | 在另一个字符串中搜索一个字符串(位置以字符为单位)             |
@@ -71,8 +71,8 @@ Windows和Linux支持这些CAPL功能。Linux下的功能尚未经过全面测�
 | `snprintf`    | 将格式化的字符串打印为字符数组(character array)              |
 | `strlen`      | 获取字符串的长度(位置以**字节(bytes)** 为单位)               |
 | `strncat`     | 将一个字符串追加到另一个字符串                               |
-| `strncmp`     | 比较两个字符串(位置以**字节(bytes) **为单位)                 |
-| `strncmp_off` | 比较两个字符串(位置以**字节(bytes) **为单位)，可以指定偏移量 |
+| `strncmp`     | 比较两个字符串(位置以**字节(bytes)** 为单位)                 |
+| `strncmp_off` | 比较两个字符串(位置以**字节(bytes)** 为单位)，可以指定偏移量 |
 | `strncpy`     | 将一个字符串复制到另一个字符串(位置以字节为单位)             |
 | `strncpy_off` | 将一个字符串复制到另一个字符串(位置以字节为单位)，可以指定偏移量 |
 | `strstr`      | 在另一个字符串中搜索一个字符串(位置以字节为单位)             |
@@ -100,12 +100,12 @@ Windows和Linux支持这些CAPL功能。Linux下的功能尚未经过全面测�
 
 
 #### 字符(character)与字节(bytes)的关系
-根据字符串编码(string encoding)规则，一个**字符(character)**可能需要几个**字节(bytes)**，例如Windows ANSI（932）编码中的日语字符或UTF-8编码中的任何特殊字符。
+根据字符串编码(string encoding)规则，一个**字符(character)** 可能需要几个**字节(bytes)**，例如Windows ANSI（932）编码中的日语字符或UTF-8编码中的任何特殊字符。
 
 **使用说明：**
 
 - 如果你使用标准的ASCII表中的字符，可以使用以`str`开头的函数， 它们全部以**字节(byte)** 为单位
-- 如果你需要使用特殊字符（如：不在ASCII表中的字符）， 你应该使用以`mb`开头的函数进行代替，它们全部以**字符(character) **为单位，适用于这种特殊编码的情况 。
+- 如果你需要使用特殊字符（如：不在ASCII表中的字符）， 你应该使用以`mb`开头的函数进行代替，它们全部以**字符(character) ** 为单位，适用于这种特殊编码的情况 。
 
 
 
@@ -327,14 +327,14 @@ long mbstrncmp_off(char s1[], long s1offset, char s2[], long s2offset, long len)
 | s1       | First string                       |
 | s2       | Second string                      |
 | len      | 要比较的最大**字符数(characters)** |
-| s1offset | s1中的偏移量（以**字符(characters) **为单位） |
-| s2offset | s2中的偏移量（以**字符(characters) **为单位）  |
+| s1offset | s1中的偏移量（以**字符(characters)** 为单位） |
+| s2offset | s2中的偏移量（以**字符(characters)** 为单位）  |
 
 #### 函数功能描述
 
-此函数将**s1**与**s2**进行比较，最多可使用**len**个字符。
+此函数将**s1** 与 **s2** 进行比较，最多可使用**len** 个字符。
 
-比较从: **s1**的**s1offset**  与  **s2**的**s2offset** 位置处开始。
+比较从: **s1** 的**s1offset**  与  **s2**的**s2offset** 位置处开始。
 
 #### 返回值介绍
 
@@ -594,7 +594,7 @@ write("%s", s1); // eine grüne Tür (german for 'a green door')
 
 ### 5.1 函数:  `strstr()`与`strstr_off()`
 
-`strstr()`函数的名称应该是：  **string(字符串)** + **in(在...内)**  + **string(字符串)**的缩写
+`strstr()`函数的名称应该是：  **string(字符串)** + **in(在...内)**  + **string(字符串)** 缩写
 
 #### 函数语法
 
@@ -637,7 +637,7 @@ pos = strstr(s1, s2); // pos = 7
 
 ### 5.2 函数:  `mbstrstr()`与`mbstrstr_off()`
 
-`strstr()`函数的名称应该是：  **MultiByte(多字节)** + **string(字符串)** + **in(在...内)**  + **string(字符串)**的缩写
+`strstr()`函数的名称应该是：  **MultiByte(多字节)** + **string(字符串)** + **in(在...内)**  + **string(字符串)** 缩写
 
 #### 函数语法
 
@@ -653,7 +653,7 @@ long mbstrstr_off(char s1[], long offset, char s2[]);
 | ------ | ------------------------------------------------------------ |
 | s1     | First string                                                 |
 | s2     | Second string                                                |
-| offset | 在**s1**的这个偏移量【以**字符(characters)**为单位】处开始搜索 |
+| offset | 在**s1**的这个偏移量【以**字符(characters)** 单位】处开始搜索 |
 
 #### 函数功能描述
 
