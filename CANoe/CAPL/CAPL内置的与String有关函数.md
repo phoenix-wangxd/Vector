@@ -13,7 +13,7 @@
 **字符串字面量(string literal)** 是一个**带引号**的字符串, 比如：  "This is a character string"
 
 注意：
->  与C语言中一样，当在**char数组(char arrays)**中存储**字符串字面量(string literals)**时，数组末尾的一个char需要为字符串终止字符（/0）保留，即char数组需要比纯字符串长度长一个元素。
+>  与C语言中一样，当在**char数组(char arrays)** 中存储**字符串字面量(string literals)** 时，数组末尾的一个char需要为字符串终止字符（/0）保留，即char数组需要比纯字符串长度长一个元素。
 
 #### 转义序列
 某些字符显示为字符串中带有前反斜杠（转义序列）的字符组合，例如：
@@ -105,7 +105,7 @@ Windows和Linux支持这些CAPL功能。Linux下的功能尚未经过全面测�
 **使用说明：**
 
 - 如果你使用标准的ASCII表中的字符，可以使用以`str`开头的函数， 它们全部以**字节(byte)** 为单位
-- 如果你需要使用特殊字符（如：不在ASCII表中的字符）， 你应该使用以`mb`开头的函数进行代替，它们全部以**字符(character) ** 为单位，适用于这种特殊编码的情况 。
+- 如果你需要使用特殊字符（如：不在ASCII表中的字符）， 你应该使用以`mb`开头的函数进行代替，它们全部以**字符(character)** 为单位，适用于这种特殊编码的情况 。
 
 
 
@@ -133,8 +133,8 @@ long mbstrlen(char s[]);  // 获取多字节字符串长度
 
 #### 函数功能描述
 
-- **strlen()**函数的返回值是入参(字符串s)的长度（以**字节(bytes) **为单位）
-- **mbstrlen()**函数的返回值是入参(字符串s)的长度（以**字符(characters)** 为单位）
+- **strlen()** 函数的返回值是入参(字符串s)的长度（以**字节(bytes)** 为单位）
+- **mbstrlen()** 函数的返回值是入参(字符串s)的长度（以**字符(characters)** 为单位）
 
 #### 举例说明
 
@@ -831,6 +831,7 @@ long str_replace_regex(char s[], char pattern[], char replacement[]);
 #### 函数功能描述
 
 形式1：将字符串中出现的所有文本替换为另一个字符串。
+
 形式2：将字符串的一部分替换为另一个字符串。
 
 #### 函数返回值描述
@@ -849,12 +850,12 @@ write(buffer);
 
 
 
-## 六、 字符串其他常用函数
+## 七、 字符串其他常用函数
 
 由于CAPL是一种类C的语言，为了说明部分函数，所以我们要先介绍该函数在C语言中的实现。
 
 
-### 6.1 C语言中的  `sprintf()` 与  `snprintf()`
+### 7.1 C语言中的  `sprintf()` 与  `snprintf()`
 
 在C语言中`sprintf()`函数与`snprintf()`函数的语法如下：
 
@@ -940,7 +941,7 @@ The half of 60 is 30, and the half of that is 15.
 
 
 
-### 6.2 CAPL函数:  `snprintf()`
+### 7.2 CAPL函数:  `snprintf()`
 
 `snprintf()`函数的名称应该是：  **string(字符串)** + + **number(个数)** + **printf(格式化打印)** 的缩写
 
