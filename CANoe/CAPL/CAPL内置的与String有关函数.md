@@ -1012,5 +1012,5 @@ String: Vector
 
 截图如下：
 
-![snprintf_example_out](.\Picture\Vector_CAPL_String_Example_1.png)
+![snprintf_example_out](./Picture/Vector_CAPL_String_Example_1.png)
 
