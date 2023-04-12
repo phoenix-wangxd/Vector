@@ -250,11 +250,24 @@ on key 's'
 {
   char s1[7] = "Vector";
   char s2[7] = "Vector";
+  char s3[8] = "Vector";
   if(strncmp(s1,s2,strlen(s1)))
-    write("not equal");
+    write("compare s1, s2, result: not equal");
   else
-    write("equal");
+    write("compare s1, s2, result: equal");
+  
+  if(strncmp(s1,s3,strlen(s1)))
+    write("compare s1, s3, result: not equal");
+  else
+    write("compare s1, s3, result: equal");
 }
+```
+
+输出结果：
+
+```
+Program / Model	compare s1, s2, result: equal
+Program / Model	compare s1, s3, result: equal
 ```
 
 
@@ -305,6 +318,8 @@ if (strncmp_off(s1, 7, s2, 0, strlen(s2)) == 0)
 else
    write("Unequal!");
 ```
+
+这个输出的结果是“Equal!”
 
 
 
@@ -805,9 +820,9 @@ long str_replace(char s[], long startoffset, char replacement[], long length); /
 ```c
 char buffer[70] = "Vector Informatik";
 str_replace(buffer, "Informatik", "CANoe");
-write(buffer);
+write("buffer now is: %s", buffer);   // 输出结果： buffer now is: Vector CANoe
 str_replace(buffer, 7, "CANalyzer", 10);
-write(buffer);
+write("buffer now is: %s", buffer);   // 输出结果： buffer now is: Vector CANalyzer
 ```
 
 
@@ -845,7 +860,7 @@ long str_replace_regex(char s[], char pattern[], char replacement[]);
 ```c
 char buffer[70] = "Vector Informatik";
 str_replace_regex(buffer, "Inf[a-z]*", "CANoe");
-write(buffer);
+write(buffer);      // 输出结果：Vector CANoe
 ```
 
 
@@ -977,9 +992,25 @@ long snprintf(char dest[], long len, char format[], ...);
 关于`snprintf()` 的示例代码：
 
 ```c
-char buffer[100], str[7] = "Vector";
-long i;
-i = snprintf(buffer,elcount(buffer),"String: %s\n", str);
-write("Output:\n%s : Character count = %d\n", buffer, i);
+on key 'z'
+{
+  char buffer[100], str[7] = "Vector";
+  long i;
+  i = snprintf(buffer,elcount(buffer),"String: %s\n", str);
+  write("Output:\n%s : Character count = %d\n", buffer, i);
+}
 ```
+
+输出结果：
+
+```
+Output:
+String: Vector
+ : Character count = 15
+
+```
+
+截图如下：
+
+![snprintf_example_out](.\Picture\Vector_CAPL_String_Example_1.png)
 
