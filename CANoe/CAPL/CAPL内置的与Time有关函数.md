@@ -365,3 +365,85 @@ on envVar EnvGearUp
 }
 ```
 
+
+
+## 四、定时器
+
+这里主要介绍：
+
+1.  `setTimer()` ： 普通的单次定时器。
+2.  `setTimerCyclic()`： 普通的周期性定时器
+
+
+### 4.1. 函数: `setTimer()`
+
+#### 函数语法
+
+```c
+void setTimer(msTimer t, long duration); // form 1
+
+void setTimer(timer t, long duration); // form 2
+
+void setTimer(timer t, long durationSec, long durationNanoSec); // form 3
+```
+
+如果使用面向对象编程，语法如下：
+
+```c++
+void msTimer::set(long);
+```
+
+#### 函数功能描述
+
+设置一个定时器
+
+#### 函数参数介绍
+
+`Timer` or `msTimer` variable and an expression which specifies the duration of the timer.
+
+
+### 举例说明
+
+示例代码：
+
+```c
+variables
+{
+  msTimer t1;
+  Timer t23;
+  char press_key[4];
+  float current_time;
+}
+
+void print_current_time(char press_key[]){
+  current_time = timeNow()/100000.0;
+  write("%s press time: %fs", press_key, current_time);
+}
+
+on key F1 {
+  print_current_time("F1");
+  setTimer(t1, 200); // set timer t1 to 200 ms
+}
+
+on key F2 {
+  print_current_time("F2");
+  setTimer (t23, 2); // set timer t23 to 2 sec
+}
+
+on key F3 {
+  print_current_time("F3");
+  setTimer (t23, 0, 1250*1000 ); // set timer t23 to 1.250 milliseconds
+}
+
+on timer t1 {
+  write("current_time:%fs, F1 was pressed 200ms ago", timeNow()/100000.0);
+}
+
+on timer t23 {
+  write("current_time:%fs, F2 was pressed 2 sec ago or F3 1250000 nsec ago", timeNow()/100000.0);
+}
+```
+
+输出结果：
+
+![Vector_CAPL_Time_Example_1](.//Picture//Vector_CAPL_Time_Example_1.png)
