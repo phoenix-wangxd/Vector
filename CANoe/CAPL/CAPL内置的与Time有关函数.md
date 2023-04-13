@@ -2,7 +2,7 @@
 
 在CAPL中我们要经常和时间打交道，为了方便的写CAPL脚本，所以我整理了Vector官方提供的与时间有关的函数，并对常用的进行简单说明。
 
->  本文几乎全部摘录自Vector的官方文档，只是做了整理与翻译。
+>  本文主体部分摘录了Vector的官方文档，做了整理与翻译；另外增加了一些我自己的理解与编写的实际函数 。
 
 ## 一、CAPL中与时间管理有关的函数
 
@@ -11,13 +11,13 @@ Windows和Linux支持这些CAPL功能。Linux下的功能尚未经过全面测�
 | Functions                       | Short Description                                            |
 | :------------------------------ | :----------------------------------------------------------- |
 | `addTimeToMeasurementStartTime` | 计算测量开始的绝对日期/时间加上偏移量                        |
-| `cancelTimer`                   | Stops an active timer                                        |
+| `cancelTimer`                   | 停止一个已经激活的定时器                                     |
 | `convertGPSTimestamp`           | 将GPS时间戳转换为基于UTC的日期和时间信息                     |
 | `convertTimestamp`              | 将时间戳转换为单独的部分                                     |
 | `convertTimestampNS`            | 将时间戳转换为单独的部分                                     |
 | `convertTimestampToNS`          | 将以天、小时、分钟和秒为单位的时间戳转换为纳秒时间戳         |
 | `convertUTCDateToUnixTimestamp` | 将给定的UTC时间和日期转换为UNIX时间戳（自1970-01-01以来的秒数） |
-| `EnvVarTimeNS`                  | 返回环境变量**envVariable**的时间戳（以纳秒为单位）          |
+| `EnvVarTimeNS`                  | 返回环境变量 **envVariable** 的时间戳（以纳秒为单位）        |
 | `getDrift`                      | Determines the constant deviation when Drift is set.         |
 | `getGPSTimeString`              | Copies a printed representation of the GPS time stamp represented as UTC date and time into the supplied character buffer. |
 | `getJitterMax`                  | 确定设置抖动(Jitter)时允许偏差的上限                         |
@@ -29,8 +29,8 @@ Windows和Linux支持这些CAPL功能。Linux下的功能尚未经过全面测�
 | `MessageTimeNS`                 | 返回以纳秒为单位的时间戳                                     |
 | `setDrift`                      | 为网络节点的计时器设置恒定偏差                               |
 | `setJitter`                     | 设置网络节点的计时器的抖动间隔(Jitter interval)              |
-| `setTimer`                      | Sets a timer.                                                |
-| `setTimerCyclic`                | Sets a cyclical timer.                                       |
+| `setTimer`                      | 设置一个定时器                                               |
+| `setTimerCyclic`                | 设置一个周期性的定时器                                       |
 | `timeDiff`                      | 消息之间或消息与当前时间之间的时间差（毫秒）                 |
 | `timeNow`                       | 提供当前模拟时间[10微秒]                                     |
 | `timeNowFloat`                  | 提供当前模拟时间[10微秒]                                     |
@@ -148,6 +148,8 @@ void getLocalTime(long time[]);
 | 7     | Day of Year (0 - 365)                                        |
 | 8     | Flag for daylight saving time (0 - 1, 1 = daylight saving time) |
 
+**注意： 这个精确度只能到秒，如果需要更高的精确度，则不能使用这个函数。**
+
 ### 举例说明
 
 示例代码：
@@ -165,6 +167,18 @@ getLocalTime(tm);
 // tm[6] = 5; (weekday)
 // tm[7] = 232;(day of year)
 // tm[8] = 1; (Summer time)
+```
+
+我写的一个可以格式化当前时间的函数（本文的后面章节中，我会用到这个函数）：
+
+```c
+// 获取当前时间(精确到秒)， 入参保证至少要容纳20个字符
+void get_current_Local_Time(char time_str[]){
+  long tm[9];
+  getLocalTime(tm);
+  snprintf(time_str, elcount(time_str), "%04d-%02d-%02d %02d:%02d:%02d",
+  tm[5]+ 1900, tm[4]+1, tm[3], tm[2], tm[1], tm[0]);
+}
 ```
 
 
@@ -222,7 +236,7 @@ long getMeasurementStartTime(long time[]);
 
 #### 函数参数介绍
 
-只有一个参数`time`， 它的类型为 `long`类型的数组(array) ，至少有8个条目。数组的条目将填充以下信息：
+只有一个参数`time`， 它的类型为 `long`类型的数组(array) ，至少有8个条目。数组的条目将**填充**以下信息：
 
 | Index | Information                                     |
 | :---- | :---------------------------------------------- |
@@ -239,27 +253,45 @@ long getMeasurementStartTime(long time[]);
 
 1 if successful, 0 if not (e.g. array to small).
 
-
 #### 举例说明
 
-示例代码：
+我写的一个获取测量开始时间的函数：
 
 ```c
-on errorframe
+variables
 {
-  long time[8];
-  addTimeToMeasurementStartTime(timeNowNS(), time);
-  write("ErrorFrame occured on %02d/%02d/%02d %02d:%02d:%02d.%-3d",
-  time[5]+1, time[4], time[6]-100, time[3], time[2], time[1], time[0]);
-  getMeasurementStartTime(time);
-  write("Measurement was started on %02d/%02d/%02d %02d:%02d:%02d.%-3d",
-  time[5]+1, time[4], time[6]-100, time[3], time[2], time[1], time[0]);
+  char g_Measure_Start_Time[24];
 }
 
-// Output e.g.:
-// ErrorFrame occured on 08/15/17 14:39:46.787
-// Measurement was started on 08/15/17 14:39:29.547
+// 获取测量开始时间(精确到毫秒)， 存储到全局变量g_Measure_Start_Time中
+void get_MeasurementStartTime_Str(){
+  long time[8];
+  getMeasurementStartTime(time);
+  snprintf(g_Measure_Start_Time, elcount(g_Measure_Start_Time), "%04d-%02d-%02d %02d:%02d:%02d",
+  time[6]+ 1900, time[5]+1, time[4], time[3], time[2], time[1], time[0]);
+}
 ```
+
+
+
+获取测量开始时间的举例，注意：这里使用到了本文前面部分定义的两个函数：
+
+```c
+on key 's'
+{
+  char temp_local_time[20];
+  get_MeasurementStartTime_Str();
+  write("Measurement was started on %s",g_Measure_Start_Time);
+  
+  get_current_Local_Time(temp_local_time);
+  write("current time is: %s",temp_local_time);
+}
+```
+
+输出结果：
+
+![Vector_CAPL_Time_Example_6](.//Picture//Vector_CAPL_Time_Example_6.png)
+
 
 
 
@@ -283,7 +315,24 @@ long addTimeMeasurementStartTime(int64 timeSpan, long time[]);
 
 
 
-另外，函数的返回值与示例代码，均可参考 `getMeasurementStartTime()` 函数中的说明。
+示例代码：
+
+```c
+on errorframe
+{
+  long time[8];
+  addTimeToMeasurementStartTime(timeNowNS(), time);
+  write("ErrorFrame occured on %02d/%02d/%02d %02d:%02d:%02d.%-3d",
+  time[5]+1, time[4], time[6]-100, time[3], time[2], time[1], time[0]);
+  getMeasurementStartTime(time);
+  write("Measurement was started on %02d/%02d/%02d %02d:%02d:%02d.%-3d",
+  time[5]+1, time[4], time[6]-100, time[3], time[2], time[1], time[0]);
+}
+
+// Output e.g.:
+// ErrorFrame occured on 08/15/17 14:39:46.787
+// Measurement was started on 08/15/17 14:39:29.547
+```
 
 
 
@@ -373,6 +422,7 @@ on envVar EnvGearUp
 
 1.  `setTimer()` ： 普通的单次定时器。
 2.  `setTimerCyclic()`： 普通的周期性定时器
+3.  `cancelTimer()`:  停止一个定时器
 
 
 ### 4.1. 函数: `setTimer()`
@@ -447,3 +497,206 @@ on timer t23 {
 输出结果：
 
 ![Vector_CAPL_Time_Example_1](.//Picture//Vector_CAPL_Time_Example_1.png)
+
+
+
+### 4.2. 函数: `setTimerCyclic()`
+
+#### 函数语法
+
+```c
+void setTimerCyclic(msTimer t, long firstDuration, long period); // form 1
+
+void setTimerCyclic(msTimer t, long period); // form 2
+
+void setTimerCyclic(timer t, int64 periodInNs); // form 3
+```
+
+如果使用面向对象编程，语法如下：
+
+```c++
+void msTimer::setCyclic(long firstDuration, long period);
+
+void msTimer::setCyclic(long period);
+
+void timer::setCyclic(int64 periodInNs);
+```
+
+#### 函数功能描述
+
+设置一个周期性的定时器； 
+
+对于形式2，`firstDuration`隐式地与`period`相同，即计时器精确地根据第一次的`period`运行。
+
+#### 函数参数介绍
+
+| 参数         | 含义                                   |
+| ------------ | -------------------------------------- |
+| `t`           | The timer to be set.                                         |
+| `firstDuration` | 计时器第一次用完之前的时间（以毫秒为单位） |
+| `period`      | 计时器在过期时重新启动的时间（以毫秒为单位） |
+| `periodInNs`  | 计时器在过期时重新启动的时间（以纳秒为单位） |
+
+
+### 举例说明
+
+在`start` 中通过`setTimerCyclic`设置周期性定时器， 示例代码：
+
+```c
+variables
+{
+  msTimer t;
+  float current_time;
+}
+on start {
+   setTimerCyclic(t, 10, 20);
+}
+
+void print_current_time(){
+  current_time = timeNow()/100000.0;
+  write("current time: %fs", current_time);
+}
+
+on Timer t
+{
+  print_current_time();
+}
+```
+
+输出结果：
+
+![Vector_CAPL_Time_Example_2](.//Picture//Vector_CAPL_Time_Example_2.png)
+
+
+
+通过键盘按键，使用`setTimerCyclic`设置周期性定时器， 示例代码：
+
+```c
+variables
+{
+  msTimer t;
+  float current_time;
+}
+
+void print_current_time(){
+  current_time = timeNow()/100000.0;
+  write("current time: %fs", current_time);
+}
+
+on Timer t
+{
+  print_current_time();
+}
+
+on key 's'
+{
+  write("current time: %fs, 'S' key Pressed , start timer", timeNow()/100000.0);
+  setTimerCyclic(t, 10, 20);
+}
+```
+
+输出结果：
+
+![Vector_CAPL_Time_Example_4](.//Picture//Vector_CAPL_Time_Example_4.png)
+
+
+
+
+### 4.3. 函数: `cancelTimer()`
+
+#### 函数语法
+
+```c
+void cancelTimer(msTimer t); // from 1
+
+void cancelTimer(timer t); // from 2
+```
+
+如果使用面向对象编程，语法如下：
+
+```c++
+void msTimer::cancel();
+```
+
+#### 函数功能描述
+
+停止一个已经激活的定时器
+
+#### 函数参数介绍
+
+一个 `Timer` 或者 `msTimer` 变量
+
+### 举例说明
+
+使用`cancelTimer()`停止**普通的定时器**，示例代码：
+
+```c
+variables {
+  float current_time;
+  char print_time_info[100];
+  msTimer ms_t_key;
+  message 0x100 test_msg = {dlc = 1, byte(0) = 0xFF, dir = Tx};
+}
+
+void print_current_time(char time_info[]){
+  current_time = timeNow()/100000.0;
+  write("current time: %fs, %s", current_time, time_info);
+}
+
+on Timer ms_t_key{
+  output(test_msg);
+  setTimer(ms_t_key, 200);
+}
+
+on key F2 {
+  setTimer(ms_t_key, 200);  // set timer to 200ms
+  print_current_time("F2 key pressed, Start timer!!");
+}
+
+on key F3 {
+  cancelTimer(ms_t_key);    // cancel timer
+  print_current_time("F3 key pressed, Cancel timer!!");
+}
+```
+
+输出结果：
+
+![Vector_CAPL_Time_Example_3](.//Picture//Vector_CAPL_Time_Example_3.png)
+
+
+
+使用`cancelTimer()`停止**周期性的定时器**，示例代码：
+
+```c
+variables
+{
+  msTimer t;
+  float current_time;
+}
+
+void print_current_time(){
+  current_time = timeNow()/100000.0;
+  write("current time: %fs", current_time);
+}
+
+on Timer t
+{
+  print_current_time();
+}
+
+on key 's'
+{
+  write("current time: %fs, 'S' key Pressed , start timer", timeNow()/100000.0);
+  setTimerCyclic(t, 30, 100);
+}
+
+on key 't' {
+  write("current time: %fs, 'T' key Pressed , Stop timer", timeNow()/100000.0);
+  cancelTimer(t);    // cancel timer
+}
+```
+
+输出结果：
+
+![Vector_CAPL_Time_Example_5](.//Picture//Vector_CAPL_Time_Example_5.png)
+
