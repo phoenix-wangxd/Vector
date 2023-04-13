@@ -416,7 +416,7 @@ on envVar EnvGearUp
 
 
 
-## 四、定时器
+## 五、定时器
 
 这里主要介绍：
 
@@ -425,7 +425,7 @@ on envVar EnvGearUp
 3.  `cancelTimer()`:  停止一个定时器
 
 
-### 4.1. 函数: `setTimer()`
+### 5.1. 函数: `setTimer()`
 
 #### 函数语法
 
@@ -500,7 +500,7 @@ on timer t23 {
 
 
 
-### 4.2. 函数: `setTimerCyclic()`
+### 5.2. 函数: `setTimerCyclic()`
 
 #### 函数语法
 
@@ -602,7 +602,7 @@ on key 's'
 
 
 
-### 4.3. 函数: `cancelTimer()`
+### 5.3. 函数: `cancelTimer()`
 
 #### 函数语法
 
