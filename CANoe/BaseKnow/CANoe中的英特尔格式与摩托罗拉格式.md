@@ -180,3 +180,55 @@ else // (*p == 0)
 
 其实这种排序完全没有任何实际意义（不会有公司采用这种方式排序的），这里仅仅是做展示。
 
+
+
+
+
+## 三、  CAPL内置的大小端转换函数
+
+由于Intel格式与Motorola格式之间的转换很常见，所以在CAPL内置的Byte Swapping函数，我们下面进行介绍。
+
+### 常用的函数语法
+
+```c
+word swapWord(word x); // form 1         word (unsigned, 2 Byte)
+
+int swapInt(int x); // form 2            int (signed, 2 Byte)
+
+dword swapDWord(dword x); // form 3      dword (unsigned, 4 Byte)
+
+long swapLong(long x); // form 4         long (signed, 4 Byte)
+
+int64 swapInt64(int64 x); // form 5      int64(signed, 8 Byte)
+
+qword swapQWord(qword x); // form 6      qword(unsigned, 8 Byte)
+```
+
+可以看到这边介绍的都是超过1个字节的数据类型(2Byte到8Byte)， 另外没有介绍：
+
+1.  浮点型： **float (8 Byte)**, **double (8 Byte)**
+2. 1个字节的Char类型： **char (1 Byte)**
+3. 1个字节的Byte类型： **byte (unsigned, 1 Byte)**
+
+### 函数功能描述
+
+交换入参中的字节。CAPL算法遵循“小端格式”（英特尔）。交换函数用于：
+
+1. 交换转换到“big-endian格式”（Motorola）
+2. 从“big-endian格式”转换的字节
+
+### 函数参数说明
+
+要交换其字节的值。(Value whose bytes are to be swapped.)
+
+### 函数返回值说明
+
+交换字节后的值。(Value with swapped bytes.)
+
+### 举例说明
+
+示例代码：
+
+```c
+bigEndian = swapInt(1234); // create constant 1234 for Motorola processors
+```
