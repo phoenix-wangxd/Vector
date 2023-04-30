@@ -1,26 +1,33 @@
-# CAPL内置的与结构化字节有关函数
+# CAPL内置的与Struct Byte有关函数
 
-在CAPL中我们要经常和结构化字节打交道，为了方便的写CAPL脚本，所以我整理了Vector官方提供的与结构化字节有关的函数，并对常用的进行简单说明。
+在CAPL中我们要经常和Struct Byte 打交道，为了方便的写CAPL脚本，所以我整理了Vector官方提供的与Struct Byte有关的函数，并对常用的进行简单说明。
 
->  本文几乎全部摘录自Vector的官方文档，只是做了整理与翻译。
+>  本文大部分摘录自Vector的官方文档，做了整理与翻译，增加了自己的理解， 并将代码改造的更加优雅实用一些。
 
 
 
-## 一、CAPL中与结构化字节有关的函数
+## 一、CAPL中与Struct Byte有关的函数
 
 Windows和Linux支持这些CAPL功能。Linux下的功能尚未经过全面测试。
 
-| Functions    | Short Description                          |
-| :----------- | :----------------------------------------- |
-| `memcmp`     | 比较参数的字节数据                         |
-| `memcpy`     | 将字节从源复制到目标                       |
-| `memcpy_h2n` | 将字节从结构复制到数组中                   |
-| `memcpy_n2h` | 用数组中的字节填充结构                     |
-| `memcpy_off` | 将字节从源复制到目标，并给出目标起始偏移量 |
+| Functions    | Short Description                                            |
+| :----------- | :----------------------------------------------------------- |
+| `memcmp`     | 比较入参中的**字节(bytes)** 数据                             |
+| `memcpy`     | 将**字节(bytes)** 从源复制到目标                             |
+| `memcpy_h2n` | 将**字节(bytes)** 从**结构(struct)** 复制到**数组(array)** 中 |
+| `memcpy_n2h` | 用**数组(array)** 中的**字节(bytes)** 填充**结构(struct)**   |
+| `memcpy_off` | 将**字节(bytes)** 从源复制到目标，并给出目标起始偏移量       |
 
 
 
-## 二、 比较多个字节
+为了便于理解本文中的示例代码，所以需要提前知道下面的知识：
+
+1.  `DWORD` 就是 Double Word， 每个word为2个字节的长度;  **DWORD双字即为4个字节，每个字节是8位，共32位** 。
+2.  小端(Little Endian) 模式 是嵌入式领域经常用到的排序方式， 特征为： **低位字节排放在内存的低地址端，高位字节排放在内存的高地址端**
+
+
+
+## 二、 Struct Byte操作: 比较多个字节
 
 ### 2.1 函数:  `memcmp()`
 
@@ -38,24 +45,22 @@ int memcmp(byte dest[], byte source[], dword size); // form 4
 
 #### 函数功能描述
 
-Compares the bytes of the parameters. In form 3, both structs must have the same type.
+比较入参的字节数据。在格式3中，两个结构必须具有相同的类型。
 
 #### 函数参数介绍
 
 
 | 参数         | 含义                                                       |
 | ------------ | ---------------------------------------------------------- |
-| dest   | A struct                                         |
-| source | Another struct                                   |
-| size   | Size of the arrays (number of bytes to compare). |
+| `dest` | A struct                                         |
+| `source` | Another struct                                   |
+| `size` | Size of the arrays (number of bytes to compare). |
 
 #### 返回值介绍
 
-0 if the bytes are equal; a value different from 0 if they are unequal
+如果**字节(bytes)** 相等，则为0；如果它们不相等，则为非0的值
 
 #### 举例说明
-
-`DWORD` 就是 Double Word， 每个word为2个字节的长度，DWORD 双字即为4个字节，每个字节是8位，共32位。
 
 关于`memcmp()`函数说明的示例代码：
 
@@ -80,7 +85,7 @@ on key 's'
 }
 ```
 
-输出结果：
+如果采用了**小端(Little Endian)模式** (一般的主机都是小端模式)， 输出结果：
 
 ```
 Data represents the number: Little Endian is used.
@@ -88,9 +93,15 @@ Data represents the number: Little Endian is used.
 
 
 
-## 三、 拷贝字节
+## 三、 Struct Byte操作:  拷贝字节
+
+在这一章节中，我们介绍四个函数：`memcmp()`、  `memcpy_n2h()`、  `memcpy_n2h()`、  `memcpy_off()` 四个函数， 它们的功能非常相似， 而且都是从`memcmp()` 的功能上进行简单的变种。
+
+
 
 ### 3.1 函数:  `memcmp()`
+
+这个函数是最通用的拷贝字节函数，作用： 将**字节(bytes)** 从源复制到目标。
 
 #### 函数语法
 
@@ -152,9 +163,9 @@ void memcpy(byte dest[], bytes source); // form 27
 void memcpy(char dest[], bytes source); // form 28
 ```
 
-#### 函数功能描述
+#### 函数功能详细描述
 
-Copies bytes from a source to a destination. In form 5, both structs must have the same type. In other forms with structs, the arrays must be large enough to contain the struct data. In form 17 and 18, the payload size and the struct size must be identical.
+将**字节(bytes)** 从源复制到目标。在格式5中，两个结构体必须具有相同的类型。在其他具有结构体的形式中，**数组(arrays)** 必须足够大才能包含结构数据。在格式17和格式18中，**负载大小(the payload size)** 和**结构大小(the struct size)** 必须相同。
 
 
 
@@ -196,7 +207,7 @@ on key 's'
 }
 ```
 
-输出结果：
+如果采用了**小端(Little Endian)模式** (一般的主机都是小端模式)， 输出结果：
 
 ```
 Bytes as dword: 0x03020100
@@ -207,6 +218,16 @@ dword as bytes: 0x78 0x56 0x34 0x12
 
 ### 3.2 函数:  `memcpy_h2n()`
 
+这个函数与前面介绍的`memcpy()` 的区别：
+
+将**结构体(struct)** 中的字节复制到**数组(array)** 中，**同时**将元素的字节顺序从小端(little-endian)模式转换为大端(big-endian)模式.
+
+>  其中h2n代表“主机(host) 到网络(network)” ,  因为**一般操作系统都是小端，而通讯协议是大端的。**
+>
+> 1. 主机(host)侧大部分用小端(little-endian)模式
+> 2. 网络(network)传输大部分用大端(big-endian)模式
+
+
 #### 函数语法
 
 ```c
@@ -214,10 +235,6 @@ void memcpy_h2n(byte dest[], struct source); // form 1
 
 void memcpy_h2n(byte dest[], int offset, struct source); // form 2
 ```
-
-#### 函数功能描述
-
-Copies the bytes from the struct into the array, and translates the byte order of the elements from little-endian to big-endian (h2n stands for "host to network").
 
 #### 函数参数介绍
 
@@ -245,11 +262,11 @@ on key 's'
   for (i = 0; i < elcount(data); ++i){
     data[i] = i; 
   }
-  memcpy_n2h(dwordWrapper, data);
+  memcpy_n2h(dwordWrapper, data);                      // 拷贝同时完成小端模式转大端模式
   write("Bytes as dword: %0#10lx", dwordWrapper.dw);
   
   dwordWrapper.dw = 0x12345678;
-  memcpy_h2n(data, dwordWrapper);
+  memcpy_h2n(data, dwordWrapper);                      // 拷贝同时完成大端模式转小端模式
   write("dword as bytes: %#lx %#lx %#lx %#lx", data[0], data[1], data[2], data[3]);
 }
 ```
@@ -263,7 +280,18 @@ dword as bytes: 0x12 0x34 0x56 0x78
 
 
 
+
+
 ### 3.3 函数:  `memcpy_n2h()`
+
+这个函数与前面介绍的`memcpy()` 的区别：
+
+将**结构体(struct)** 中的字节复制到**数组(array)** 中，**同时**将元素的字节顺序从大端(big-endian)模式转换为小端(little-endian)模式.
+
+>  其中n2h代表“网络(network) 到主机(host)” ,  因为**一般操作系统都是小端，而通讯协议是大端的。**
+>
+>  1. 网络(network)传输大部分用大端(big-endian)模式
+>  2. 主机(host)侧大部分用小端(little-endian)模式
 
 #### 函数语法
 
@@ -272,10 +300,6 @@ void memcpy_n2h(struct dest, byte source[]); // form 1
 
 void memcpy_n2h(struct dest, byte source[], int offset); // form 2
 ```
-
-#### 函数功能描述
-
-Fills the struct with bytes from the array, and translates the byte order of the elements from big-endian to little-endian (n2h stands for "network to host").
 
 #### 函数参数介绍
 
@@ -286,15 +310,19 @@ Fills the struct with bytes from the array, and translates the byte order of the
 | `dest`            | Array into which the bytes shall be copied |
 | `offset (form 2)` | Offset into the array                      |
 
-
-
 #### 举例说明
 
-示例代码参见`memcpy_h2n`部分的说明。
+示例代码参见`memcpy_h2n()` 部分的说明。
 
 
 
 ### 3.4 函数:  `memcpy_off()`
+
+这个函数与前面介绍的`memcpy()` 的区别：
+
+>  将**字节(bytes)** 从源复制到目标，同时给出目标起始偏移量。目标的大小必须至少为`destOffset+length`。
+
+
 
 #### 函数语法
 
@@ -316,17 +344,15 @@ void memcpy_off( byte dest[], dword destOffset, char source[], dword sourceOffse
 void memcpy_off( char dest[], dword destOffset, char source[], dword sourceOffset, dword length); // form 8
 ```
 
-#### 函数功能描述
 
-Copies bytes from a source to destination, giving a destination start offset. The size of the destination must be at least destOffset + length.
 
 #### 函数参数介绍
 
 
 | 参数              | 含义                                       |
 | ----------------- | ------------------------------------------ |
-| `dest`       | (form 1, 2): Struct into which the bytes shall be copied. (other forms): Array into which the bytes shall be copied. |
-| `source`     | (form 3, 4): Struct from which the bytes shall be copied. (other forms): Array from which the bytes shall be copied. |
+| `dest`       | **(form 1, 2)**: Struct into which the bytes shall be copied.  **(other forms)**: Array into which the bytes shall be copied. |
+| `source`     | **(form 3, 4)**: Struct from which the bytes shall be copied.  **(other forms)**: Array from which the bytes shall be copied. |
 | `destOffset` | Start offset in the destination struct or array.             |
 | `sourceOffset` | Start offset int the source struct or array.                 |
 | `length`     | Number of bytes which shall be copied.                       |
