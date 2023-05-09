@@ -11,15 +11,32 @@
 
 
 
+在介绍本文之前，有些基础知识需要先知道。
+
+### 0.1 关于显性(dominant)和隐性(recessive)
+
+CAN总线是双绞线，传输数据时，根据两根电缆之间的电压差进行传输，也称为**差分传输** ，通过双绞线连接配合差分传输方式能够有效地抑制共模干扰。
+
+- 在没有数据传输时，两条线的电压相同，为**隐性信号，逻辑信号为1**。
+- 一旦有数据进行传输，两条线就会出现电压不同的情况，从而**产生电压差**，CAN总线就会表现为**显性信号，逻辑信号为0**。
+
+
+
+> 本文中所有的图中，逻辑0在y轴的0位置上， 逻辑1在y轴的1位置上， 这符合CAN标准中的绘图规则。
+>
+> 其他参考： https://zhuanlan.zhihu.com/p/447088312
+
+
+
 ## 一、 位填充(Bit Stuffing)介绍
 
-在了解CAN总线中的错误检测之前，首先需要了解什么是**位填充(Bit Stuffing)**。
+在了解CAN总线中的错误帧之前，首先需要了解什么是**位填充(Bit Stuffing)** , 这是一项非常重要的技术。
 
 
 
 ### 1.1 什么是位填充(Bit Stuffing)
 
-一句话概括： 当CAN节点**发送** 逻辑电平（显性dominant或隐性recessive）相同的五位时，它必须发送一位相反电平。 CAN**接收** 节点会自动删除这个新增的额外位。
+一句话概括： 当CAN节点**发送** 逻辑电平（显性dominant或隐性recessive）相同的五bit时，它必须发送一bit相反电平。 CAN**接收** 节点会自动删除这个新增的额外bit。
 
 下面用图解释什么是位填充(Bit Stuffing)：
 
@@ -32,15 +49,9 @@
 
 
 
-关于显性(dominant)和隐性(recessive)的补充说明：
-
-> CAN总线是双绞线，传输数据时，根据两根电缆之间的电压差进行传输，也称为**差分传输**。通过双绞线连接配合差分传输方式能够有效地抑制共模干扰，但是这就带来一个问题，**在没有数据传输时，两条线的电压相同，为隐性信号，逻辑信号为1**。一旦有数据传输，两条线就会出现电压不同的情况，从而**产生电压差**，CAN总线就会表现为**显性信号，逻辑信号为0**。
->
-> 参考： https://zhuanlan.zhihu.com/p/447088312
 
 
-
-### 1.2 位填充(Bit Stuffing)作用在CAN网络的哪些部分
+### 1.2 位填充(Bit Stuffing)作用在CAN帧的哪些部分
 
 在CAN标准的“BIT STREAM CODING”章节中规定了**需要填充的部分** :
 
@@ -81,13 +92,13 @@ CAN协议中规定这个位填充(Bit Stuffing) 目的是：处理比如CAN消�
 
 ### 2.1 错误帧(Error Frame)的帧结构
 
-在CAN标准中规定的
+在CAN标准中规定的错误帧的帧结构：
 
 > The ERROR FRAME consists of two different fields. The first field is given by the superposition of ERROR FLAGs contributed from different stations. The following second field is the ERROR DELIMITER.
 
 翻译：
 
-> ERROR FRAME(错误帧) 由两个不同的字段组成。第一个字段是由不同站点贡献的**错误标志(ERROR FLAG)** 的叠加给出的。下面的第二个字段是**错误界定符(ERROR DELIMITER)** 。
+> ERROR FRAME(错误帧) 由两个不同的字段组成。第一个字段是由不同站点贡献的**错误标志(ERROR FLAG)** 的叠加给出的。第二个字段是**错误界定符(ERROR DELIMITER)** 。
 
 
 
@@ -95,11 +106,20 @@ Vector制作了Error Frame形象化的结构图：
 
 ![CAN_Framing_Error_Frame](.//Picture//CAN_Framing_Error_Frame.png)
 
-这部分看上比较简单， 但是很重要，我们需要先了解一部分基础知识：
+这部分看上比较简单， 但是很重要。 同时我们需要先了解一部分基础知识：
 
-1. 第一段错误标志，也就是上图中的(primary) Error Flag,  它通常被称之为：  **'primary' Active Error Flag**  ，之所以叫“Active”是因为它是连续的6个显性比特。 同时它一般来自于首先发现错误的节点（'discovering' node)
-2. 第二段错误标志，也就是上图中的(secondary) Error Flag,   它通常被称之为： **'secondary' Active Error Flag(s)** ， 这部分比较复杂由0~6个显性比特位组成。 同时它一般来自于后续“反应过来的”节点（'reacting' node）。这一部分有时候也叫做“回显标志”
+1. 第一段错误标志，也就是上图中的(primary) Error Flag,  它常常被称之为：  **'primary' Active Error Flag**  ，之所以叫“Active”是因为它常常是连续的6个显性比特。 同时它一般来自于首先发现错误的节点（'discovering' node)
+2. 第二段错误标志，也就是上图中的(secondary) Error Flag,   它常常被称之为： **'secondary' Active Error Flag(s)** ， 这部分比较复杂，常常由0~6个显性比特位组成。 同时它一般来自于后续“反应过来的”节点（'reacting' node）。这一部分有时候也叫做“回显标志”
 3. 错误界定符(Error Delimiter)：8个连续的隐性位。
+
+
+
+>  注意: 在上面介绍错误标志(ERROR FLAG)时，我用了“常常”， 并不是必须是“显性”或者"Active".
+
+错误标志(ERROR FLAG)有两种形式：**主动错误标志(ACTIVE ERROR FLAG)** 和**被动错误标志(PASSIVE ERROR FLAG)** 。
+
+1. ACTIVE ERROR FLAG（主动错误标志）由六个连续的“显性”位组成。
+2. PASSIVE ERROR FLAG（被动错误标志）由六个连续的“隐性”位组成，除非它被其他节点的“显性”位覆盖。
 
 
 
@@ -178,7 +198,7 @@ CAN标准原始的定义:
 
 CAN协议要求出现5个连续相同电平之后，需要插入一个翻转电压，以避免时钟错误。
 
-在需要执行位填充原则的帧段（数据帧遥控帧的SOF~CRC序列），检测到连续六个同性位，则检测到一个填充错误。
+在需要执行位填充的帧段（数据帧和遥控帧的SOF~CRC序列），检测到连续6个逻辑电平相同的bit，则检测到一个填充错误。
 
 
 
@@ -197,12 +217,20 @@ CAN标准原始的定义:
 CAN标准原始的定义:
 >  A FORM ERROR has to be detected when a fixed-form bit field contains one or more illegal bits.
 
-在一帧报文发送时，如果在必须发送预定值的区域内检测到了非法值，那么就检测到一个格式错误。
+
+这种消息级别(message-level)的检查利用了CAN消息中的某些字段/位必须始终处于特定逻辑级别这一事实。具体来说，第1位（也就是SOF）必须是显性的，而整个8位EOF字段必须是隐性的。此外，ACK和CRC分隔符必须是隐性的。如果接收器发现这些bit中的任何一个具有无效逻辑电平，则接收器将其检测为**格式错误(Form Error)**。
+
 CAN报文中，有预定值的区域包括：
 
-- 数据帧和遥控帧的CRC界定符、ACK界定符、EOF；
-- 错误帧界定符
-- 过载帧界定符
+- 数据帧和遥控帧的CRC界定符、ACK界定符(ACK DELIMITER)、EOF(END OF FRAME)；
+- **错误帧界定符(ERROR Delimiter)**:  固定为8个隐性位
+- **过载帧界定符(OVERLOAD Delimiter)**:  固定为8个隐性位
+
+
+
+下面用DEL位错误（DEL位规定必须为隐性位）来举例说明Form Error：
+
+![CAN-bus-form-error-message](.//Picture//CAN-bus-form-error-message.svg)
 
 
 
@@ -211,9 +239,9 @@ CAN报文中，有预定值的区域包括：
 CAN标准原始的定义:
 >  An ACKNOWLEDGMENT ERROR has to be detected by a transmitter whenever it does not monitor a ’dominant’ bit during the ACK SLOT.
 
-按照CAN协议的规定，在一帧报文（数据帧或者遥控帧）发出之后，如果接收节点Node_B成功接收了该帧报文，那么接收节点Node_B就要在该帧报文ACK槽对应的时间段内向总线上发送一个显性位来应答发送节点Node_A。这样发送节点Node_A就会在ACK槽时间段内从总线上回读到一个显性位。因此：
+按照CAN协议的规定，在一帧报文（数据帧或者遥控帧）发出之后，如果接收节点Node_B成功接收了该帧报文，那么接收节点Node_B就要在该帧报文ACK槽对应的时间段内向总线上发送一个**显性位** 来应答发送节点Node_A。这样发送节点Node_A就会在ACK槽时间段内从总线上回读到一个显性位。因此：
 
-当发送节点Node_A在ACK SLOT时间段内没有回读到显性位，那么发送节点Node_A就会检测到一个ACK应答错误。这表示没有一个节点成功接收该帧报文。
+**当发送节点Node_A在ACK SLOT段内没有回读到显性位 ，那么发送节点Node_A就会检测到一个ACK应答错误。这表示没有一个节点成功接收该帧报文。**
 
 
 
@@ -276,7 +304,7 @@ CAN标准原始的定义:
 
 #### 3.1.2 CAN节点的节点状态(node states)之间的切换
 
-每个CAN控制器都会跟踪自己的状态并采取相应的行动。CAN节点根据其错误计数器（error counters）的值改变状态。具体而言，每个CAN节点都会跟踪传输错误计数器（Transmit Error Counter, TEC）和接收错误计数器（Receive Error Counter, REC）：
+每个CAN控制器都会跟踪自己的状态并采取相应的行动。CAN节点根据其错误计数器（error counters）的值改变状态。具体而言，每个CAN节点都会跟踪 **发送错误计数器(Transmit Error Counter, TEC)** 和**接收错误计数器(Receive Error Counter, REC)** ：
 
 - 如果REC或TEC超过127，则CAN节点进入错误被动(Error Passive) 状态
 - 如果TEC超过255，则CAN节点进入总线断开(Bus Off) 状态
@@ -293,11 +321,13 @@ CAN标准原始的定义:
 
 ### 3.2 错误计数器(error counters)的更改
 
-在我们进入如何增加/减少错误计数器(error counters)的逻辑之前，让我们重新访问CAN错误帧以及主要/次要错误标志(primary/secondary error flags)。
+在讲解如何增加/减少错误计数器(error counters)的逻辑之前，让我们重新回顾CAN错误帧以及主要/次要错误标志(primary/secondary error flags)。
 
-从CAN错误帧图中可以明显看出，在其自己的6个显性比特序列之后观察到显性比特的CAN节点将知道其引发了**主要错误标志(primary error flag)**。在这种情况下，我们可以将此can节点称为错误的“发现者”。
+>  从CAN错误帧图中可以明显看出:  对于一个节点NodeA， 在它自己的6个显性比特序列之后，又发现了1个显性比特，那么NodeA可以断定并发出发 **主要错误标志(primary error flag)**。在这种情况下，我们可以将NodeA称为错误的“发现者(discoverer)”。
 
-起初，CAN节点可以反复发现错误，并通过在其他节点之前抛出错误标志来迅速做出反应，这听起来可能是积极的。然而，在实践中，发现者(the discoverer)通常也是导致错误的罪魁祸首，因此根据概述，它会受到更严厉的惩罚。
+
+
+起初，CAN节点可以反复发现错误，并通过在其他节点之前抛出错误标志来迅速做出反应，这听起来可能是积极的(positive)。然而，在实践中，发现者(discoverer)通常也是导致错误的罪魁祸首，因此根据概述，它会受到更严厉的惩罚。
 
 
 
