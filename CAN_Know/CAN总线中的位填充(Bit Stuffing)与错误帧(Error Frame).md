@@ -42,6 +42,8 @@ CAN总线是双绞线，传输数据时，根据两根电缆之间的电压差�
 
 ![CAN-bus-bit-stuffing](.//Picture//CAN-bus-bit-stuffing.svg)
 
+![CAN-bus-bit-stuffing](.//Picture//CAN-bus-bit-stuffing.png)
+
 这个图的说明：
 
 1. 上半部分是发送节点原本需要发送的内容，下半部分是加上**位填充(Bit Stuffing)** 后在CAN网络中真实的CAN报文。
