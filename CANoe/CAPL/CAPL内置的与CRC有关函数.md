@@ -281,13 +281,11 @@ on key 'b'
 }
 ```
 
-输出结果：
+键盘按下'a'或者'b'输出的结果都是：
 
 ```
-Data represents the number: Little Endian is used.
+CRC of data: 0x4B
 ```
-
-
 
 
 
@@ -339,6 +337,12 @@ on key 'b'
 }
 ```
 
+键盘按下'a'或者'b'输出的结果都是：
+
+```
+CRC of data: 0xDF
+```
+
 
 
 ### 4.3 函数:  `Crc_CalculateCRC16()`
@@ -387,7 +391,11 @@ on key 'b'
 }
 ```
 
+键盘按下'a'或者'b'输出的结果都是：
 
+```
+CRC of data: 0x29B1
+```
 
 
 
@@ -435,6 +443,12 @@ on key 'b'
   retval = Crc_CalculateCRC32(data, elcount (data), 2, elcount (data) -2, 0, 1, crc);
   write("CRC of data: 0x%X", crc);
 }
+```
+
+键盘按下'a'或者'b'输出的结果都是：
+
+```
+CRC of data: 0xCBF43926
 ```
 
 
@@ -489,6 +503,12 @@ on key 'b'
 }
 ```
 
+键盘按下'a'或者'b'输出的结果都是：
+
+```
+CRC of data: 0x1697D06A
+```
+
 
 
 ### 4.6 函数:  `Crc_CalculateCRC64()`
@@ -514,7 +534,6 @@ long Crc_CalculateCRC64 (BYTE* data,
 关于`Crc_CalculateCRC64()`函数说明的示例代码：
 
 ```c
-	
 // first CALL, Offset '0'
 on key 'a'
 {
@@ -522,7 +541,7 @@ on key 'a'
   qword crc;
   byte data[9] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
 
-  retval = Crc_CalculateCRC8(data, elcount (data), 0, elcount (data), 0, 1, crc);
+  retval = Crc_CalculateCRC64(data, elcount (data), 0, elcount (data), 0, 1, crc);
   write("CRC of data: 0x%X", crc);
 }
 
@@ -533,9 +552,15 @@ on key 'b'
   qword crc;
   byte data[11] = {0xAA ,0xAA,0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
 
-  retval = Crc_CalculateCRC8(data, elcount (data), 2, elcount (data) -2, 0, 1, crc);
+  retval = Crc_CalculateCRC64(data, elcount (data), 2, elcount (data) -2, 0, 1, crc);
   write("CRC of data: 0x%X", crc);
 }
+```
+
+键盘按下'a'或者'b'输出的结果都是：
+
+```
+CRC of data: 0xDF1939FA
 ```
 
 
