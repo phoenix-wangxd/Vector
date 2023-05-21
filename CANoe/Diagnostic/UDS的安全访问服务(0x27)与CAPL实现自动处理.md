@@ -12,11 +12,15 @@
 
 关于ISO 14229的安全访问（Security Access）一个比较好的介绍文档： [安全访问（ISO14229系列之27服务）](https://blog.csdn.net/weixin_44536482/article/details/93340252)
 
+当客户端连接到服务端（即ECU）时，客户端有一个会话（session）和一个安全级别（security level）。
+
 
 
 ### 1.1 不同的会话(Session)模式
 
-ECU启动后会处于默认会话(Default Session)中，在这个会话中可以进行一般的ECU操作； 但是还有些操作可能涉及到安全或者其他方面的原因，不允许在默认会话(Default Session)中使用，因此如果需要更高的权限，就必须切换到其他的会话中。
+默认情况下，服务器通过为新客户端分配**默认会话(Default Session)** 来迎接新客户端，在该会话中，只有少数特定服务可以访问，如读取DTC。
+
+但是还有些操作可能涉及到安全或者其他方面的原因，不允许在默认会话(Default Session)中使用，因此如果需要更高的权限，就必须切换到其他的会话中。
 
 在ISO14229中规定了那些服务可以在默认会话中使用，那些不可以在默认会话中使用, 如下：
 ![14229_Services_allowed_Session_1](.//Picture//14229_Services_allowed_Session_1.png)
@@ -25,22 +29,20 @@ ECU启动后会处于默认会话(Default Session)中，在这个会话中可以
 
 
 
-#### 1.2 安全访问(Security Access)的工作流程
+### 1.2 安全访问(Security Access)的工作流程
 
 因为诊断会话(**extendedDiagnosticSession**) 中包含高权限的操作，因此切换到这个会话后，必须要执行**解锁(unlock)** 操作才能进行后续的使用。所谓的**解锁(unlock)** 操作需要使用UDS提供的安全访问(Security Access)服务，也就是UDS的27服务。
 
+0x27 安全访问(Security Access)服务的典型工作流程如下：
 
-
-0x27服务的典型工作流程如下：
-
-1. Client先主动发送一个:   请求**种子(Seed)** 的消息
+1. Client先主动发送一个:   **请求种子(Seed)** 的消息
 2. ECU（也就是Server端）收到来自Client的请求后，ECU会发送**种子(Seed)**
 3. Client在收到ECU发送过来的**种子(Seed)** 后，客户端对种子(Seed)进行计算，并发送计算后的 **密钥(Key)**
 4. ECU在收到**密钥(Key)** 后对其进行校验，如果**密钥(Key)** 是有效的，那么ECU会将自己解锁，并向Client发送积极响应；否则返回否定响应
 
 
 
-#### 1.3 安全访问(Security Access)的步骤1：客户端发送请求种子(Seed)
+#### 1.2.1 安全访问(Security Access)的步骤1：客户端发送请求种子(Seed)
 
 Client端发送请求**种子(Seed)** 的消息格式如下：
 
@@ -50,7 +52,7 @@ Client端发送请求**种子(Seed)** 的消息格式如下：
 
 
 
-#### 1.4 安全访问(Security Access)的步骤2：ECU发送种子(Seed)
+#### 1.2.2 安全访问(Security Access)的步骤2：ECU发送种子(Seed)
 
 ECU端在收到步骤1的请求消息后，如果请求格式正确，那么会发送积极响应，也就是发送**种子(Seed)** ， 消息格式如下：
 
@@ -64,7 +66,7 @@ ECU端在收到步骤1的请求消息后，如果请求格式正确，那么会�
 
 
 
-#### 1.5 安全访问(Security Access)的步骤3：客户端发送密钥(Key)
+#### 1.2.3 安全访问(Security Access)的步骤3：客户端发送密钥(Key)
 
 Client端发送**密钥(Key)** 的消息格式如下：
 
@@ -74,7 +76,7 @@ Client端发送**密钥(Key)** 的消息格式如下：
 
 
 
-#### 1.6 安全访问(Security Access)的步骤4：ECU发送最终的响应
+#### 1.2.4 安全访问(Security Access)的步骤4：ECU发送最终的响应
 
 ECU在收到**密钥(Key)** 后对其进行校验，于是就分为两种情况：
 
@@ -83,6 +85,22 @@ ECU在收到**密钥(Key)** 后对其进行校验，于是就分为两种情况�
 
 ![14229_0x27_Services_NRC_1](.//Picture//14229_0x27_Services_NRC_1.png)
 ![14229_0x27_Services_NRC_2](.//Picture//14229_0x27_Services_NRC_2.png)
+
+
+### 1.3 不同的安全等级(Security level)
+
+**安全等级(Security level)** 是客户端通过提供安全密钥来解锁服务器内的功能而获得的状态。UDS被设计为允许多达64个安全级别，这些级别最终是在服务器中设置的布尔标志。
+
+这些安全级别以及它们解锁的内容不是由UDS定义的，而是由ECU制造商定义的。安全级别可以解锁整个服务、子功能或对特定值的访问。例如，写入车辆识别码（VIN）可能需要特定的安全级别，该级别不同于写入最大速度或超越车辆IO所需的安全级别。
+
+![14229_0x27_SecurityLevel_1](.//Picture//14229_0x27_SecurityLevel_1.png)
+
+在**默认会话(Default Session)** 中不允许解锁**安全等级(Security level)** 。要获得一些权限，客户端必须首先切换到启用SecurityAccess服务的非默认会话。只有这样，客户端才能执行握手，从而解锁所需的功能。
+
+在ISO 14229中对于安全等级有两个比较重要的描述：
+
+1. 在任何时刻，只有一个安全级别处于活动(active)状态
+2. 安全级别(security level)编号是随意的，不同级别之间不意味着有任何关系
 
 
 
@@ -144,12 +162,37 @@ long DiagGenerateKeyFromSeed(char ecuQualifier[],
 | `seedArray`      | 用于生成密钥(key)的**种子(Seed)** |
 | `seedArraySize`  | `SeedArray` 参数的字节数    |
 | `securityLevel`  | 创建密钥(Key)使用的安全级别 |
-| `variant`        | 诊断描述(diagnostic description)的变体(Variant) |
-| `ipOption`       | 将转发给自定义函数的可选参数。如果未使用，则此处必须给出一个空字符串""。<br/>未来该选项可以转发到DLL。如果不存在或传入空字符串，则该值可能从通信状态产生，例如ECU所处的诊断会话。 |
+| `variant`        | 诊断描述(diagnostic description)的变体(Variant)【通俗来讲，是诊断的受体ECU的名称】 |
+| `ipOption`       | 官方文档写的太晦涩了，通俗来讲【诊断的受体ECU的代号】 |
 | `keyArray`       | 使用自定义的DLL创建的**密钥(Key)** |
 | `maxKeyArraySize` | `keyArray`参数允许的最大字节数 |
 | `keyActualSizeOut` | `keyArray`参数实际使用的字节数      |
 | `ecuQualifier`   | 相应诊断描述的诊断配置对话框中设置的ECU或Target的限定符(Qualifier) |
+
+上述参数中`variant`变量的值可以从CANoe的诊断界面中获取，如下：
+
+![CANoe_Diag_ECU_qualifier_1](.//Picture//CANoe_Diag_ECU_qualifier_1.png)
+
+上述参数中`option`变量的值可以从函数`diagGetCurretnEcu()` 的返回中获取，如下：
+
+```c
+on diagResponse *
+{
+  char ecu[100];
+  diagGetCurrentEcu(ecu, elcount(ecu));
+  write("Received response from %s", ecu);
+}
+
+on key 'a'
+{
+  // Diagnostic description with ECU qualifier 'FunctionalGroup' configured for Functional Group Requests (FGR)
+  diagRequest FunctionalGroup.DefaultSession_Start req1;
+
+  diagSendRequest(req1); // Request is sent to functional group, therefore multiple ECUs may respond
+}
+```
+
+
 
 #### 返回值介绍
 
