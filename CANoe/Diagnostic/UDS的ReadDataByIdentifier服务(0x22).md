@@ -16,13 +16,15 @@
 
 ![0x22_Request_Message_Definition](.//Picture//ReadDataByIdentifier_0x22//0x22_Request_Message_Definition.png)
 
-数据标识符（Data Identifier）常简称为DID。
+数据标识符（Data Identifier）常简称为**DID**， 与之对应的是服务标识符（**SID**，Service Identifier）。
 
 ### 1.2 数据标识符（Data Identifier）规定
 
 从上面可以看到DID可以自定义，但是如果没有约定，那么不同厂商之间肯定会有大量冲突，所以在ISO 14229-1协议的**C1 DID parameter definitions** 部分规定了DID的分配。下图是该分配表的前面部分：
 
 ![0x22_DID_Definitions_01](.//Picture//ReadDataByIdentifier_0x22//0x22_DID_Definitions_01.png)
+
+两个字节的DID可以容纳很多不同类型的数据，除了一小部分ISO 14229-1协议规定了使用用途，大量的DID都是由主机厂来定义的，可以阅读主机厂文档来确定具体用途。
 
 
 
@@ -40,9 +42,11 @@
 
 ### 2.1 常用的数据标识符（Data Identifier）
 
-常用的数据标识符（Data Identifier）如下：
+ISO 14229-1协议规定的通用数据标识符（Data Identifier）如下：
 
 ![0x22_DID_Definitions_02](.//Picture//ReadDataByIdentifier_0x22//0x22_DID_Definitions_02.png)
+
+虽然这些比较常用，但是可以看到它的CVT都是“**U(User option)**”，不是必须要实现的。
 
 
 
