@@ -1,0 +1,43 @@
+/*@!Encoding:936*/
+includes
+{
+  
+}
+
+variables
+{  
+  message 0x1ff  Write_Relay_Status;  // DeviceID=0xFF
+  message 0x2ff  Read_Relay_Status;   // DeviceID=0xFF  
+  message 0x3ff  Read_Input_Status;   // DeviceID=0xFF
+  message 0x4ff  Device_Paramet_Set;  // DeviceID=0xFF
+  
+  byte Fill_0_Data[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+  byte Fill_1_Data[8] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+  byte Current_Relay_Status[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+}
+
+
+void Fill_Message_Use_Default_Data(message * tmp_msg, byte tmp_data[])
+{
+  int i;
+  i=0;
+  for(i; i<8; i++){
+    tmp_msg.byte(i) = tmp_data[i];
+  }
+}
+
+void Read_All_Relay_Status()
+{
+  Read_Relay_Status.DataLength = 8; 
+  Fill_Message_Use_Default_Data(Read_Relay_Status, Fill_1_Data);
+  output(Read_Relay_Status);
+  
+}
+
+
+
+on sysvar_update sysvar::CAN_IODevice_Ctrl::Write_Status::Relay_01
+{
+  Read_All_Relay_Status();
+ 
+}

@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="" interface="">
+    <namespace name="CAN_IODevice_Ctrl" comment="" interface="">
+      <namespace name="Read_Input_Status" comment="" interface="">
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Node_01" comment="读取输入口的第1个节点状态(Bit=0表示该位有效)" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Valid" displayString="Valid" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="InValid" displayString="InValid" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Node_02" comment="读取输入口的第2个节点状态(Bit=0表示该位有效)" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Valid" displayString="Valid" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="InValid" displayString="InValid" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Node_03" comment="读取输入口的第3个节点状态(Bit=0表示该位有效)" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Valid" displayString="Valid" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="InValid" displayString="InValid" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Node_04" comment="读取输入口的第4个节点状态(Bit=0表示该位有效)" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Valid" displayString="Valid" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="InValid" displayString="InValid" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Node_05" comment="读取输入口的第5个节点状态(Bit=0表示该位有效)" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Valid" displayString="Valid" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="InValid" displayString="InValid" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Node_06" comment="读取输入口的第6个节点状态(Bit=0表示该位有效)" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Valid" displayString="Valid" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="InValid" displayString="InValid" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Node_07" comment="读取输入口的第7个节点状态(Bit=0表示该位有效)" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Valid" displayString="Valid" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="InValid" displayString="InValid" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Node_08" comment="读取输入口的第8个节点状态(Bit=0表示该位有效)" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Valid" displayString="Valid" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="InValid" displayString="InValid" />
+          </valuetable>
+        </variable>
+      </namespace>
+      <namespace name="Read_Statuts" comment="" interface="">
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_01" comment="读取输出口的第1个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_02" comment="读取输出口的第2个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_03" comment="读取输出口的第3个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_04" comment="读取输出口的第4个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_05" comment="读取输出口的第5个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_06" comment="读取输出口的第6个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_07" comment="读取输出口的第7个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_08" comment="读取输出口的第8个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+      </namespace>
+      <namespace name="Write_Status" comment="" interface="">
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_01" comment="控制输出口的第1个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_02" comment="控制输出口的第2个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_03" comment="控制输出口的第3个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_04" comment="控制输出口的第4个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_05" comment="控制输出口的第5个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_06" comment="控制输出口的第6个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_07" comment="控制输出口的第7个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Relay_08" comment="控制输出口的第8个继电器是否吸合" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+          <valuetable name="Custom" definesMinMax="false">
+            <valuetableentry value="0" lowerBound="0" upperBound="0" description="Relay_Off" displayString="Relay_Off" />
+            <valuetableentry value="1" lowerBound="1" upperBound="1" description="Relay_On" displayString="Relay_On" />
+          </valuetable>
+        </variable>
+      </namespace>
+    </namespace>
+  </namespace>
+</systemvariables>
